@@ -1,0 +1,182 @@
+.image{
+    padding: 40px 80px;
+}
+
+.captiontitle{
+    padding: 20px 70px;
+    font-size: 130px;
+    font-family: 'Open Sans';
+    font-weight: 800;
+    font-style: italic;
+}
+
+.signUp{
+    height: 100%;
+    display: flex;
+}
+
+.caption{
+    width: 66%;
+    min-height: 100%;
+    background: url("E:/carpoolingui/src/Images/img1.png");
+    background-repeat: no-repeat;
+    background-size: 90% auto;
+    background-position: bottom;
+    display: inline-block;
+}
+
+.signupdetails{
+    min-height: 100%;
+    display: inline-block;
+    background-color: #FFAC19;
+    width: 34%;
+    background-image: url("E:/carpoolingui/src/Images/imgg2.png");
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: bottom;
+    display: inline-block;
+    font-family: 'Open Sans';
+    text-align: center;
+    align-content: center;
+    vertical-align: middle;
+}
+
+.colorchange{
+    background-color: #9319FF;
+}
+
+.initial{
+    color: #334053;
+    padding-right: 20px;
+    display: inline-block;
+    height: 100px;
+    line-height: 100px;
+}
+
+.second{
+    color: #FFAC19;
+    display: inline-block;
+    height: 100px;
+    line-height: 100px;
+}
+
+.last{
+    color: #9319FF;
+    display: inline-block;
+    height: 100px;
+    line-height: 100px;
+}
+
+.lines{
+    line-height: 100px;
+    padding: 10px 0;
+}
+
+.tagline{
+    font-family: 'Open Sans';
+    color: #334053;
+    padding-left: 70px;
+    font-size: 35px;
+    letter-spacing: 10px
+}
+
+.passwordfeild{
+    overflow: hidden;
+    background-color: white;
+    border-radius: 5px;
+    margin:15px;
+}
+
+.signupheading{
+    border-bottom: 3px solid white;
+    color: white;
+    font-size: 40px;
+    
+    padding: 100px 20px 5px 20px;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.signupform{
+    display: inline-block;
+    width:80%
+}
+
+.signupform input{
+    width: 90%;
+    border: none;
+    border-radius: 5px;
+    padding: 30px 20px;
+    display: inline-block;
+    font-size: 20px;
+    outline: none;
+}
+
+.password{
+    width:80% !important;
+    float: left !important;
+    margin:0 !important;
+    position: relative;
+}
+
+.redeye{
+    color: #CDCDCD;
+    font-size: 30px
+}
+
+.showpassword{
+    cursor: pointer;
+    bottom: 11px;
+    height: 16px;
+    right: 0;
+    color: white;
+    display: inline-table;
+    padding: 24px 10px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: .8em;
+}
+
+::placeholder{
+    font-size: 20px;
+    color: #d1d1d1;
+    font-weight: lighter;
+}
+
+.signupform input[type=button]{
+    color: white;
+    width: auto;
+    padding: 18px 50px;
+    font-size: 20px;
+    font-weight: 800;
+    border-radius: 36px;
+    outline: none;
+    cursor: pointer;
+}
+
+.membertext{
+    color: white;
+    font-size: 20px;
+    font-weight: lighter;
+}
+
+.signuppointer{
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 25px;
+    border-bottom: 3px solid white;
+}
+
+.signupbutton{
+    background-color: #9319FF;
+}
+
+.loginbutton{
+    background-color: #FFAC19;
+}
+
+.submitlink{
+    display: inline-block;
+}
