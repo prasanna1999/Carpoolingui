@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './index.sass';
 import App from './Components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';

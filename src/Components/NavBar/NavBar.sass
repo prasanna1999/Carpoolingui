@@ -1,0 +1,56 @@
+.navbar
+  height: 20%
+
+.logo
+  padding: 40px 0px 40px 80px
+  display: inline-block
+
+.profile:hover
+  cursor: pointer
+
+.profile
+  display: inline
+  position: relative
+  padding: 40px 80px 40px 0px
+  float: right
+
+.active
+  background-color: #7653Fc
+  color: white !important
+
+.listitems
+    margin-top: 20px
+    background-color: white
+    width: max-content
+    visibility: hidden
+    text-align: center
+    position: absolute
+    box-shadow: 1px 10px 8px 1px #EBEBEB
+    z-index: 1
+
+    .item
+      color: gray
+      text-decoration: none
+      display: block
+      width: auto
+      .itemname
+        padding: 20px 50px
+
+    .item :hover
+      background-color: #7653Fc
+      color: white
+
+.profile:hover .listitems
+    visibility: visible    
+
+.profilename
+    padding-top: 70px
+    padding-right: 5px
+    font-size: 20px
+    vertical-align: middle
+    font-family: sans-serif
+    font-weight: bold
+
+.profilepic img
+    height: 70px
+    width: 70px

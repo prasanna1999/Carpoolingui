@@ -1,5 +1,6 @@
 import React from 'react';
-import './BookARide.css';
+import './BookARide.sass';
+import {DocumentCard} from 'office-ui-fabric-react';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
 import {Icon} from 'office-ui-fabric-react/lib/Icon';
 import 'font-awesome/css/font-awesome.min.css';
@@ -9,7 +10,7 @@ function BookARide() {
         <div className="booking">
             <div className="machedRides">
                 <div className="matches">Your Matches</div>
-                <div className="card">
+                <DocumentCard className="card">
                 <table className="details">
                     <tr className="name">
                         <td colspan="2">Prasanna</td>
@@ -42,8 +43,8 @@ function BookARide() {
                         <td>50</td><td>02</td>
                     </tr>
                     </table>
-                </div>    
-                <div className="card">
+                </DocumentCard>    
+                <DocumentCard className="card">
                 <table className="details">
                     <tr className="name">
                         <td colspan="2">Prasanna</td>
@@ -76,7 +77,7 @@ function BookARide() {
                         <td>50</td><td>02</td>
                     </tr>
                     </table>
-                </div> 
+                </DocumentCard> 
             </div>
         </div>
     );
