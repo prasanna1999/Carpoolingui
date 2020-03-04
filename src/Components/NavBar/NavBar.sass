@@ -1,5 +1,9 @@
 .navbar
-  height: 20%
+  position: fixed;
+  width: 100%
+  z-index: 1
+  height: 200px;
+  background-color: white
 
 .logo
   padding: 40px 0px 40px 80px
@@ -8,18 +12,23 @@
 .profile:hover
   cursor: pointer
 
+.profileinfo
+  float: right
+  display: flex
+  cursor: pointer
+  margin: 40px 50px 0 0
+
 .profile
   display: inline
   position: relative
   padding: 40px 80px 40px 0px
-  float: right
 
 .active
   background-color: #7653Fc
   color: white !important
 
 .listitems
-    margin-top: 20px
+    margin-top: 70px
     background-color: white
     width: max-content
     visibility: hidden
@@ -27,6 +36,8 @@
     position: absolute
     box-shadow: 1px 10px 8px 1px #EBEBEB
     z-index: 1
+    font-family: sans-serif
+    font-weight: bold
 
     .item
       color: gray
@@ -40,16 +51,19 @@
       background-color: #7653Fc
       color: white
 
-.profile:hover .listitems
+.profileinfo:hover .listitems
     visibility: visible    
 
 .profilename
-    padding-top: 70px
+    padding-top: 30px
+    display: inline-block
     padding-right: 5px
     font-size: 20px
-    vertical-align: middle
     font-family: sans-serif
     font-weight: bold
+
+.profilepic
+  display: inline-block
 
 .profilepic img
     height: 70px

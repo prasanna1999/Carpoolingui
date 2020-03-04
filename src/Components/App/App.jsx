@@ -5,9 +5,11 @@ import Home from '../Home/Home';
 import Navbar from '../NavBar/Navbar';
 import BookARide from '../BookARide/BookaRide';
 import RideForm from '../RideForm/RideForm';
+import BookingStatus from '../BookingStatus/BookingStatus';
 import OfferARide from '../OfferARide/OfferARide';
 import MyRides from '../MyRides/MyRides';
 import SignUp from '../SignUp/SignUp';
+import Profile from '../Profile/Profile';
 
 function App() {
   return (
@@ -16,13 +18,14 @@ function App() {
         <Redirect to="/signup" />
       </Route>
       <Route path="/ui" component={Navbar}/>
-      <Route path="/ui/rideform/:id" component={RideForm} />
       <Switch>
         <Route exact path="/ui/home" component={Home} />
-        <Route path="/ui/rideform/bookaride" component={BookARide} />
-        <Route path="/ui/rideform/offeraride" component={OfferARide} />
+        <Route path="/ui/bookaride" component={BookARide} />
+        <Route path="/ui/offeraride" component={OfferARide} />
         <Route path="/ui/myrides" component={MyRides} />
         <Route path="/signup" component={SignUp} />
+        <Route path="/ui/bookingstatus/:id" component={BookingStatus}/>
+        <Route path="/ui/profile" component={Profile} />
       </Switch>
     </BrowserRouter>
   );

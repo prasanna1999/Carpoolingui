@@ -9,8 +9,8 @@ function Home() {
         <div className="greet">
           Hey John!
         </div>
-        <span className="buttons"><Link to='/ui/rideform/true'><button className="bookbutton">Book a ride</button></Link></span>
-        <span className="buttons"><Link to='/ui/rideform/false'><button className="offerbutton">Offer a ride</button></Link></span>
+        <span className="buttons"><Link to='/ui/bookaride'><button className="bookbutton">Book a ride</button></Link></span>
+        <span className="buttons"><Link to='/ui/offeraride'><button className="offerbutton">Offer a ride</button></Link></span>
       </div>
     </div>
   );
