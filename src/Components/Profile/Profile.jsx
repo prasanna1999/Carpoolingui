@@ -1,27 +1,89 @@
 import React from 'react';
 import './Profile.sass';
-import {DocumentCard,Label,TextField} from 'office-ui-fabric-react';
-
+import { DocumentCard, Label, TextField, MessageBar,MessageBarType } from 'office-ui-fabric-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import User from '../User';
+toast.configure({
+  autoClose: 2000,
+  draggable: false,
+});
 class Profile extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { Name: User[0].Name, Email: User[0].Email, PhoneNumber: User[0].PhoneNumber,isValid:true,
+            errors:{Name: '', Email: '', PhoneNumber:''}
+        };
+    }
+    update=()=>{
+        if(!this.validateForm(this.state.errors)){
+            this.setState({isValid:false});
+        }
+        else{
+            this.setState({ isValid: true });
+            toast("Update SuccessFul !");
+        }
+    }
+    validateForm = (errors) => {
+        let valid = true;
+        Object.values(errors).forEach(
+            (val) => val.length > 0 && (valid = false)
+        );
+        return valid;
+    }
+    handleChange = (e) => {
+        e.preventDefault();
+        const { name, value } = e.target;
+        let errors = this.state.errors;
+        switch (name) {
+            case 'Name':
+                errors.Name =
+                    value.length < 3
+                        ? 'Name must be 3 characters long!'
+                        : '';
+                break;
+            case 'Email':
+                errors.Email =
+                    this.validEmailRegex.test(value)
+                        ? ''
+                        : 'Email is not valid!';
+                break;
+            case 'PhoneNumber':
+                errors.PhoneNumber =
+                    this.validPhoneNumberRegex.test(value)
+                        ? ''
+                        : 'PhoneNumber is not valid!';
+                break;
+        }
+        this.setState({ errors, [name]: value });
+        this.setState({ [name]: e.target.value });
+    }
+    validEmailRegex = RegExp(/^([a-z0-9_.])+\@(([a-z0-9-])+\.)+([a-z]{2,4})+$/i);
+    validPhoneNumberRegex = RegExp(/^[0-9]{10}$/);
+    successmessage() {
+        this.setState({ isMessageBarActivate: true });
+    }
     render() {
+        const {errors}=this.state;
         return (
             <div className="ms-Grid profileInfo" dir="ltr">
                 <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm12 ms-lg10 ms-xxl8">
+                    <div className="ms-Grid-col ms-sm12">
                         <DocumentCard className="formcard">
-                        <div className="formdata">
-                            <Label>Name</Label>
-                            <TextField name="name" value="John Wills"/>
-                        </div>
-                        <div className="formdata">
-                            <Label>Email</Label>
-                            <TextField name="email" disabled value="johnwills@technovert.com"/>
-                        </div>
-                        <div className="formdata">
-                            <Label>Phone Number</Label>
-                            <TextField name="phoneNumber" value="9630258741"/>
-                        </div>
-                        <input type="button" value="Update"/>
+                            {!this.state.isValid?<p className="error">Please enter required feilds</p>:""}
+                            <div className="formdata">
+                                <Label>Name {errors.Name.length > 0 && errors.Name !== 'e' ? <div className='error'>{errors.Name}</div> : ''}</Label>
+                                <TextField name="Name" value={this.state.Name} onChange={this.handleChange.bind(this)} />
+                            </div>
+                            <div className="formdata">
+                                <Label>Email {errors.Email.length > 0 && errors.Email !== 'e' ? <div classEmail='error'>{errors.Email}</div> : ''}</Label>
+                                <TextField name="Email" disabled value={this.state.Email} onChange={this.handleChange.bind(this)} />
+                            </div>
+                            <div className="formdata">
+                                <Label>Phone Number {errors.PhoneNumber.length > 0 && errors.PhoneNumber !== 'e' ? <div className='error'>{errors.PhoneNumber}</div> : ''}</Label>
+                                <TextField name="PhoneNumber" value={this.state.PhoneNumber} onChange={this.handleChange.bind(this)} />
+                            </div>
+                            <input type="button" value="Update" onClick={this.update} />
                         </DocumentCard>
                     </div>
                 </div>

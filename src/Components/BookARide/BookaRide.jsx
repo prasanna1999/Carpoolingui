@@ -1,6 +1,6 @@
 import React from 'react';
 import './BookARide.sass';
-import { DocumentCard,DatePicker } from 'office-ui-fabric-react';
+import { DocumentCard,DatePicker,Toggle } from 'office-ui-fabric-react';
 import {Link} from 'react-router-dom';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -9,40 +9,101 @@ import 'font-awesome/css/font-awesome.min.css';
 class BookARide extends React.Component{
     constructor(props){
         super(props);
-        this.state={isSubmitClicked:false}
+        this.state={isSubmitClicked:false,isValid:true,
+            From:null,To:null,NoOfSeats:null,Date:null,Time:null,
+            errors:{From:'e',To:'e',NoOfSeats:'e',Date:'e',Time:'e'}
+        }
     }
 
-    handleChange() {
+    handleToggle=()=> {
         this.props.history.push("/ui/offeraride");
     }
     
     setClass(e){
-        this.setState({id:e.target.id});
+        if(e.target.innerText==null)
+            this.state.errors.Time="Please select atleast one";
+        else
+            this.state.errors.Time="";
+        this.setState({id:e.target.id,Time:e.target.innerText});
+    }
+
+    validateForm = (errors) => {
+        let valid = true;
+        Object.values(errors).forEach(
+            (val) => val.length > 0 && (valid = false)
+        );
+        return valid;
     }
 
     showMatchedBooking(){
-        this.setState({isSubmitClicked:true});
+        if (!this.validateForm(this.state.errors)) {
+            this.setState({ isValid: false });
+        }
+        else{
+            this.setState({ isValid: true });
+            this.setState({isSubmitClicked:true});
+        }
     }
 
+    handleDate = (event)=>{
+        if(event<new Date())
+            this.state.errors.Date ="Please select valid date";
+        else
+            this.state.errors.Date=""
+        this.setState({Date:event});
+    }
+    handleChange = (event) => {
+        event.preventDefault();
+        const { name, value } = event.target;
+        let errors = this.state.errors;
+        switch (name) {
+            case 'From':
+                errors.From =
+                    value.length < 2
+                        ? 'Please enter minimum 2 letters'
+                        : '';
+                break;
+            case 'To':
+                errors.To =
+                    value.length < 2
+                        ? 'Please enter minimum 2 letters'
+                        : '';
+                break;
+            case 'NoOfSeats':
+                errors.NoOfSeats =
+                value <= 0 || value>3
+                    ? 'Please enter number in between 1 and 3'
+                    : '';
+                    break;
+        }
+        this.setState({ errors, [name]: value });
+        this.setState({ [name]: event.target.value });
+    }
+    _onFormatDate = (date) => {
+        return date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getFullYear());
+      };
+
     render(){
+        const { errors } = this.state;
     return (
         <div className="bookride">
             <DocumentCard className="book">
-                <div className="title">Book a Ride<label className="switch"><input type="checkbox" name="buttonChanger" checked={true} onClick={this.handleChange.bind(this)} /><span className="slider round"></span></label></div>
+                <div className="title">Book a Ride<Toggle className="toggle" checked onClick={this.handleToggle}/></div>
                 <div className="tag">we get you the rides asap !</div>
                 <form className="bookingForm">
                     <div className="formdata">
-                        <label>From</label>
-                        <input type="text" name="from" />
-                        <label>To</label>
-                        <input type="text" name="to" />
-                        <label>Seats Required</label>
-                        <input type="text" name="noOfSeats" />
-                        <label>Date</label>
-                        <DatePicker/>
+                        {!this.state.isValid?<p className="error">Please enter required feilds</p>:""}
+                        <label>From {errors.From.length > 0 && errors.From !== 'e' ? <div className='error'>{errors.From}</div> : ''}</label>
+                        <input type="text" name="From" onChange={this.handleChange} value={this.state.From}/>
+                        <label>To {errors.To.length > 0 && errors.To !== 'e' ? <div className='error'>{errors.To}</div> : ''}</label>
+                        <input type="text" name="To"  onChange={this.handleChange} value={this.state.To}/>
+                        <label>Seats Required {errors.NoOfSeats.length > 0 && errors.NoOfSeats !== 'e' ? <div className='error'>{errors.NoOfSeats}</div> : ''}</label>
+                        <input type="number" name="NoOfSeats"  onChange={this.handleChange} value={this.state.NoOfSeats}/>
+                        <label>Date {errors.Date.length > 0 && errors.Date !== 'e' ? <div className='error'>{errors.Date}</div> : ''}</label>
+                        <DatePicker name="Date" onSelectDate={this.handleDate} value={this.state.Date} formatDate={this._onFormatDate}/>
                         <label>
-                        Time
-                    </label>
+                            Time {errors.Time.length > 0 && errors.Time !== 'e' ? <div className='error'>{errors.Time}</div> : ''}
+                        </label>
                     <div>
                         <span id="time1" className={this.state.id==="time1"?"activetime":"time"} onClick={this.setClass.bind(this)}>5am - 9am</span>
                         <span id="time2" className={this.state.id==="time2"?"activetime":"time"} onClick={this.setClass.bind(this)}>9am - 12pm</span>

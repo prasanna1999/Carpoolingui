@@ -1,10 +1,8 @@
 import React from 'react';
-import './App.sass';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Home from '../Home/Home';
 import Navbar from '../NavBar/Navbar';
 import BookARide from '../BookARide/BookaRide';
-import RideForm from '../RideForm/RideForm';
 import BookingStatus from '../BookingStatus/BookingStatus';
 import OfferARide from '../OfferARide/OfferARide';
 import MyRides from '../MyRides/MyRides';

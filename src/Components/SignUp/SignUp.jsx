@@ -52,6 +52,7 @@ class SignUp extends React.Component {
             this.setState({ isValid: false });
         }
         else{
+            localStorage.setItem('User','Prasanna');
             this.props.history.push("/ui/home");
         }
     }
