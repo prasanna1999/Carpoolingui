@@ -1,13 +1,18 @@
 import React from 'react';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
 import './SignUp.sass';
+import axios from 'axios'; 
 import { Link } from 'react-router-dom';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 class SignUp extends React.Component {
     constructor(props) {
         super(props);
-        this.state = ({ isSignUpSelected: true, passwordtype: 'password', Email: null, Password: null, ConfirmPassword: null, errors: { Email: 'e', Password: 'e', ConfirmPassword: 'e' }, isValid: true });
+        this.state = ({
+            isLoginClicked:false,
+            isUserExists: false,
+            isCredentialsValidated:false,
+            isSignUpSelected: true, passwordtype: 'password',Name:null, Email: null, Password: null, ConfirmPassword: null, errors: { Email: 'e', Password: 'e', ConfirmPassword: 'e' }, isValid: true });
     }
     changeState() {
         this.setState({ isSignUpSelected: !this.state.isSignUpSelected });
@@ -52,18 +57,44 @@ class SignUp extends React.Component {
             this.setState({ isValid: false });
         }
         else{
-            localStorage.setItem('User','Prasanna');
+            let index=this.state.Email.indexOf('@');
+            axios.post('https://localhost:44334/api/user/', {Id:this.state.Email.slice(0,index)+this.state.Email,Name:this.state.Email.slice(0,index),Email:this.state.Email,PhoneNumber:'9876543210',Password:this.state.Password,Role:'User'})            
+            localStorage.setItem('Name',this.state.Email.slice(0,index));
+            localStorage.setItem('Email',this.state.Email);
+            localStorage.setItem('Id',this.state.Email.slice(0,index)+this.state.Email);
+            localStorage.setItem('PhoneNumber','9876543210');
             this.props.history.push("/ui/home");
         }
-    }
+}
 
     validateLogIn(){
         if (!this.validateLoginForm(this.state.errors)) {
             this.setState({ isValid: false });
         }
         else{
-            this.props.history.push("/ui/home");
-        }
+            this.setState({isLoginClicked:true});
+            axios.get('https://localhost:44334/api/user/'+this.state.Email)  
+            .then(response => {
+                if(response.data==""){
+                    this.setState({isUserExists:false});
+                    return;
+                }
+                else{
+                    this.setState({isUserExists:true});
+                    if(this.state.Password==response.data.password){
+                        this.setState({isCredentialsValidated:true});
+                        localStorage.setItem('Name',response.data.name);
+                        localStorage.setItem('Email',response.data.email);
+                        localStorage.setItem('Id',response.data.id);
+                        localStorage.setItem('PhoneNumber',response.data.phoneNumber);
+                        this.props.history.push("/ui/home");
+                    }
+                    else{
+                        console.log("wrong password");
+                    }
+                }
+        })
+    }
     }
 
     validateLoginForm = (errors) => {
@@ -108,6 +139,7 @@ class SignUp extends React.Component {
                     <div className="signupblock">
                         <div className="signupheading">{this.state.isSignUpSelected ? "Sign Up" : "Login"}</div>
                         <div className="signupform">
+                            {this.state.isLoginClicked?!this.state.isUserExists?<p className="error">No such email exists</p>:!this.state.isCredentialsValidated?<p className="error">Incorrect password</p>:"":""}
                             {!this.state.isValid?<p className="error">Please enter required feilds</p>:""}
                             {errors.Email.length > 0 && errors.Email !== 'e' ? <p className='error'>{errors.Email}</p> : ''}
                             <div className="passwordfeild">

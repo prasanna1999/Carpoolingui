@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios'; 
 import './OfferRide.sass';
 import { DocumentCard, Icon, DatePicker,Toggle } from 'office-ui-fabric-react';
 import AddStop from '../AddStop/AddStop';
@@ -13,9 +14,10 @@ class OfferRide extends React.Component {
         super(props);
         this.state = {
             noOfStops: 1, id: "", isSubmitClicked: false,isValid:true,isStopValid:true,seatid:"",
-            From: "", To: "", NoOfSeats: "", Date: "", Time: "",
-            errors: { From: 'e', To: 'e', Date: 'e', Time: 'e' },
-            stoperrors: {NoOfSeats: 'e'}
+            From: "", To: "", NoOfSeats: 0, Date: "", Time: "",VehicleModel:"",VehicleNumber:"",Price:0,
+            errors: { From: 'e', To: 'e', Date: 'e', Time: 'e',VehicleModel:'e',VehicleNumber:'e' },
+            stoperrors: {NoOfSeats: 'e'},
+            isVehicleExists:false
         }
     }
     addStop() {
@@ -38,10 +40,37 @@ class OfferRide extends React.Component {
         }
         else{
             this.setState({ isStopValid: true });
+            let userId=localStorage.getItem('Id');
+            let date= this._onFormatDate(this.state.Date)+'T'+this.state.Time+':00';
+            console.log(date);
+            axios.post('https://localhost:44334/api/vehicle/',
+            {Id:userId+this.state.VehicleModel,
+            Model:this.state.VehicleModel,
+            CarNumber: this.state.VehicleNumber,
+            UserId: userId
+            })
+            axios.post('https://localhost:44334/api/ride/',
+            {
+                UserId:userId,
+                From : this.state.From,
+                To: this.state.To,
+                type: 2,
+                VehicleId:userId+this.state.VehicleModel,
+                Id: userId+this.state.From+this.state.To,
+                Distance: 10,
+                NoOfVacentSeats: Number(this.state.NoOfSeats),
+                Price: Number(this.state.Price),
+                Date:date,
+                Time:date,
+                EndDate:date
+            }
+            )
+            console.log(parseInt(this.state.NoOfSeats));
+            console.log(Number(this.state.NoOfSeats));
             toast("Ride Added SuccessFully!");
             this.setState({noOfStops: 1, id: "", isSubmitClicked: false,isValid:true,isStopValid:true,seatid:"",
-                From: "", To: "", NoOfSeats: "", Date: "", Time: "",
-                errors: { From: 'e', To: 'e', Date: 'e', Time: 'e' },
+                From: "", To: "", NoOfSeats: "", Date: "", Time: "",VehicleModel:"",VehicleNumber:"",
+                errors: { From: 'e', To: 'e', Date: 'e', Time: 'e',VehicleModel:'e',VehicleNumber:'e' },
                 stoperrors: {NoOfSeats: 'e'}});
         }
     }
@@ -59,7 +88,7 @@ class OfferRide extends React.Component {
             this.state.errors.Time = "Please select atleast one";
         else
             this.state.errors.Time = "";
-        this.setState({ id: e.target.id, Time: e.target.innerText });
+        this.setState({ id: e.target.id, Time: 2 });
     }
 
     validateForm = (errors) => {
@@ -105,12 +134,36 @@ class OfferRide extends React.Component {
                         ? 'Please enter minimum 2 letters'
                         : '';
                 break;
+            case 'VehicleModel':
+                errors.VehicleModel=
+                    value.length<3
+                        ? 'Please enter minimum 3 letters'
+                        :'';
+                        break;
+            case 'VehicleNumber':
+                errors.VehicleNumber=
+                    value.length<7
+                    ? 'Please enter valid vechicle number'
+                    :'';
+                    break;
+            case 'Time':
+                errors.Time='';
+                break;
         }
         this.setState({ errors, [name]: value });
         this.setState({ [name]: event.target.value });
     }
     _onFormatDate = (date) => {
-        return date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getFullYear());
+        let month,day;
+        if(date.getMonth()+1<10)
+            month='0'+(date.getMonth()+1);
+        else
+            month=date.getMonth()+1;
+        if(date.getDate()<10)
+            day='0'+date.getDate();
+        else
+            day=date.getDate();
+        return  (date.getFullYear()) + '-' +(month) + '-' + (day);
       };
 
     render() {
@@ -129,17 +182,26 @@ class OfferRide extends React.Component {
                             <label>To {errors.To.length > 0 && errors.To !== 'e' ? <div className='error'>{errors.To}</div> : ''}</label>
                             <input type="text" name="To" onChange={this.handleChange} value={this.state.To} />
                             <label>Date {errors.Date.length > 0 && errors.Date !== 'e' ? <div className='error'>{errors.Date}</div> : ''}</label>
-                            <DatePicker name="Date" onSelectDate={this.handleDate} value={this.state.Date} formatDate={this._onFormatDate} />
+                            <DatePicker name="Date" onSelectDate={this.handleDate} value={this.state.Date} formatDate={this._onFormatDate} parseDateFromString={this._onParseDateFromString}/>
                             <label>
                                 Time {errors.Time.length > 0 && errors.Time !== 'e' ? <div className='error'>{errors.Time}</div> : ''}
                             </label>
-                            <div>
+                            <input type="time" name="Time" value={this.state.Time} onChange={this.handleChange}/>
+                            {/* <div>
                                 <span id="time1" className={this.state.id === "time1" ? "activetime" : "time"} onClick={this.settimeClass.bind(this)}>5am - 9am</span>
                                 <span id="time2" className={this.state.id === "time2" ? "activetime" : "time"} onClick={this.settimeClass.bind(this)}>9am - 12pm</span>
                                 <span id="time3" className={this.state.id === "time3" ? "activetime" : "time"} onClick={this.settimeClass.bind(this)}>12pm - 3pm</span>
                                 <span id="time4" className={this.state.id === "time4" ? "activetime" : "time"} onClick={this.settimeClass.bind(this)}>3pm - 6pm</span>
                                 <span id="time5" className={this.state.id === "time5" ? "activetime" : "time"} onClick={this.settimeClass.bind(this)}>6pm - 9pm</span>
+                            </div> */}
+                            {this.isVehicleExists
+                            ?""
+                            :<div><label>Vehicle Model {errors.VehicleModel.length > 0 && errors.VehicleModel !== 'e' ? <div className='error'>{errors.VehicleModel}</div> : ''}</label>
+                            <input type="text" name="VehicleModel" onChange={this.handleChange} value={this.state.VehicleModel} />
+                            <label>Vehicle Number {errors.VehicleNumber.length > 0 && errors.VehicleNumber !== 'e' ? <div className='error'>{errors.VehicleNumber}</div> : ''}</label>
+                            <input type="text" name="VehicleNumber" onChange={this.handleChange} value={this.state.VehicleNumber} />
                             </div>
+                            }
                         </div>
                         <div className="faicons">
                             <div className="icon"><Icon iconName='StatusCircleInner' className="circle_icon" /></div>
@@ -170,7 +232,7 @@ class OfferRide extends React.Component {
                                     <span id="seat2" onClick={this.setClass.bind(this)} className={this.state.seatid === "seat2" ? "activeseat" : "vacentSeats"}>2</span>
                                     <span id="seat3" onClick={this.setClass.bind(this)} className={this.state.seatid === "seat3" ? "activeseat" : "vacentSeats"}>3</span>
                                 </td><td>
-                                        <div className="price">180$</div></td></tr>
+                                        <input type="number" className="price" name="Price" value={this.state.Price} onChange={this.handleChange}/></td></tr>
                             </table>
                             <input type="button" className='submitButton' value='Submit' onClick={this.OfferRide} />
                         </form>

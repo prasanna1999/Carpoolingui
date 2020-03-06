@@ -11,7 +11,7 @@ toast.configure({
 class Profile extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { Name: User[0].Name, Email: User[0].Email, PhoneNumber: User[0].PhoneNumber,isValid:true,
+        this.state = { Name: localStorage.getItem('Name'), Email: localStorage.getItem('Email'), PhoneNumber: localStorage.getItem('PhoneNumber'),isValid:true,
             errors:{Name: '', Email: '', PhoneNumber:''}
         };
     }
