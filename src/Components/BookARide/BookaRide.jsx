@@ -2,6 +2,7 @@ import React from 'react';
 import './BookARide.sass';
 import { DocumentCard,DatePicker,Toggle } from 'office-ui-fabric-react';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import 'font-awesome/css/font-awesome.min.css';
@@ -42,6 +43,8 @@ class BookARide extends React.Component{
         else{
             this.setState({ isValid: true });
             this.setState({isSubmitClicked:true});
+            axios.get('https://localhost:44334/api/ride/'+this.state.From+"/"+this.state.To+"/"+this.state.NoOfSeats+"/"+this.state.Date)
+            .then(response=>{})  
         }
     }
 

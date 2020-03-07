@@ -17,7 +17,8 @@ class OfferRide extends React.Component {
             From: "", To: "", NoOfSeats: 0, Date: "", Time: "",VehicleModel:"",VehicleNumber:"",Price:0,
             errors: { From: 'e', To: 'e', Date: 'e', Time: 'e',VehicleModel:'e',VehicleNumber:'e' },
             stoperrors: {NoOfSeats: 'e'},
-            isVehicleExists:false
+            isVehicleExists:false,
+            stop:null
         }
     }
     addStop() {
@@ -29,7 +30,7 @@ class OfferRide extends React.Component {
         this.appendedComponents = [];
         for (let i = 1; i <= this.state.noOfStops; i++) {
             this.appendedComponents.push(
-                <AddStop id={i} />
+                <AddStop id={i} name="stop" onChange={this.handleChange}/>
             )
         }
     }
@@ -63,8 +64,7 @@ class OfferRide extends React.Component {
                 Date:date,
                 Time:date,
                 EndDate:date
-            }
-            )
+            })
             console.log(parseInt(this.state.NoOfSeats));
             console.log(Number(this.state.NoOfSeats));
             toast("Ride Added SuccessFully!");
@@ -148,6 +148,8 @@ class OfferRide extends React.Component {
                     break;
             case 'Time':
                 errors.Time='';
+                break;
+            case 'stop':
                 break;
         }
         this.setState({ errors, [name]: value });
