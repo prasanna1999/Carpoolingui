@@ -7,6 +7,7 @@ import BookingStatus from '../BookingStatus/BookingStatus';
 import OfferARide from '../OfferARide/OfferARide';
 import MyRides from '../MyRides/MyRides';
 import SignUp from '../SignUp/SignUp';
+import RideDetails from '../RideDetails/RideDetails';
 import Profile from '../Profile/Profile';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/signup" component={SignUp} />
         <Route path="/ui/bookingstatus/:id" component={BookingStatus}/>
         <Route path="/ui/profile" component={Profile} />
+        <Route path="/ui/offeredRide/:id" component={RideDetails}/>
       </Switch>
     </BrowserRouter>
   );

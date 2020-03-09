@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios'; 
 import './OfferRide.sass';
 import { DocumentCard, Icon, DatePicker,Toggle } from 'office-ui-fabric-react';
-import AddStop from '../AddStop/AddStop';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 toast.configure({
@@ -14,7 +13,7 @@ class OfferRide extends React.Component {
         super(props);
         this.state = {
             noOfStops: 1, id: "", isSubmitClicked: false,isValid:true,isStopValid:true,seatid:"",
-            From: "", To: "", NoOfSeats: 0, Date: "", Time: "",VehicleModel:"",VehicleNumber:"",Price:0,
+            From: "", To: "", NoOfSeats: 0, Date: "", Time: "",VehicleModel:"",VehicleNumber:"",Price:0,Stops:[],
             errors: { From: 'e', To: 'e', Date: 'e', Time: 'e',VehicleModel:'e',VehicleNumber:'e' },
             stoperrors: {NoOfSeats: 'e'},
             isVehicleExists:false,
@@ -22,7 +21,11 @@ class OfferRide extends React.Component {
         }
     }
     addStop() {
+        if(this.locationName!=""){
+        this.setState({Stops:this.state.Stops.concat(this.locationName)});
         this.setState({ noOfStops: this.state.noOfStops + 1 });
+        this.locationName=""
+        }
     }
     appendedComponents = [];
     getAppendedComponents = () => {
@@ -30,9 +33,17 @@ class OfferRide extends React.Component {
         this.appendedComponents = [];
         for (let i = 1; i <= this.state.noOfStops; i++) {
             this.appendedComponents.push(
-                <AddStop id={i} name="stop" onChange={this.handleChange}/>
+                    <div className="stop">
+                    <label>Stop{i}</label>
+                    <input type="text" name={"stop"+i}  onChange={this.handleStop}/>
+                    </div>
+                // <AddStop id={i} name="stop" onChange={this.handleChange}/>
             )
         }
+    }
+    locationName="";
+    handleStop=(e)=>{
+        this.locationName=e.target.value;
     }
     
     OfferRide=()=>{
@@ -57,7 +68,7 @@ class OfferRide extends React.Component {
                 To: this.state.To,
                 type: 2,
                 VehicleId:userId+this.state.VehicleModel,
-                Id: userId+this.state.From+this.state.To,
+                Id: userId+this.state.From+this.state.To+this._onFormatDate(this.state.Date),
                 Distance: 10,
                 NoOfVacentSeats: Number(this.state.NoOfSeats),
                 Price: Number(this.state.Price),
@@ -65,6 +76,21 @@ class OfferRide extends React.Component {
                 Time:date,
                 EndDate:date
             })
+            let locations=this.state.Stops;
+            if(this.locationName!=""){
+                locations.concat(this.locationName);
+            }
+            console.log(locations)
+            locations.map((location)=>{
+            axios.post('https://localhost:44334/api/location/',
+            {
+                RideId:userId+this.state.From+this.state.To+this._onFormatDate(this.state.Date),
+                LocationName: location,
+                Distance: 5,
+                Id: userId+this.state.From+this.state.To+this._onFormatDate(this.state.Date)+location
+            })
+            })
+            
             console.log(parseInt(this.state.NoOfSeats));
             console.log(Number(this.state.NoOfSeats));
             toast("Ride Added SuccessFully!");
@@ -149,7 +175,7 @@ class OfferRide extends React.Component {
             case 'Time':
                 errors.Time='';
                 break;
-            case 'stop':
+            default:
                 break;
         }
         this.setState({ errors, [name]: value });

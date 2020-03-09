@@ -12,6 +12,7 @@ class BookARide extends React.Component{
         super(props);
         this.state={isSubmitClicked:false,isValid:true,
             From:null,To:null,NoOfSeats:null,Date:null,Time:null,
+            AvailableRides:[],
             errors:{From:'e',To:'e',NoOfSeats:'e',Date:'e',Time:'e'}
         }
     }
@@ -23,9 +24,31 @@ class BookARide extends React.Component{
     setClass(e){
         if(e.target.innerText==null)
             this.state.errors.Time="Please select atleast one";
-        else
+        else{
             this.state.errors.Time="";
-        this.setState({id:e.target.id,Time:e.target.innerText});
+            let time;
+            switch(e.target.innerText){
+                case '5am - 9am':
+                    time='05:00:00'
+                    break;
+                case '9am - 12pm':
+                    time='09:00:00'
+                    break;
+                case '12pm - 3pm':
+                    time='12:00:00'
+                    break;
+                case '3pm - 6pm':
+                    time='15:00:00'
+                    break;
+                case '6pm - 9pm':
+                    time='18:00:00'
+                    break;
+                default:
+                    time='00:00:00'
+                    break;
+            }
+            this.setState({id:e.target.id,Time:time});
+        }
     }
 
     validateForm = (errors) => {
@@ -43,13 +66,22 @@ class BookARide extends React.Component{
         else{
             this.setState({ isValid: true });
             this.setState({isSubmitClicked:true});
-            axios.get('https://localhost:44334/api/ride/'+this.state.From+"/"+this.state.To+"/"+this.state.NoOfSeats+"/"+this.state.Date)
-            .then(response=>{})  
+            let date = this._onFormatDate(this.state.Date)+"T"+this.state.Time;
+            axios.get('https://localhost:44334/api/ride/'+this.state.From+"/"+this.state.To+"/"+this.state.NoOfSeats+"/"+date)
+            .then(response=>{
+                console.log(response.data)
+                this.setState({AvailableRides:response.data})})
         }
     }
 
     handleDate = (event)=>{
-        if(event<new Date())
+        let date=new Date();
+        date.setHours(0)
+        date.setMinutes(0)
+        date.setSeconds(0)
+        date.setMilliseconds(0)
+        console.log(date)
+        if(event<date)
             this.state.errors.Date ="Please select valid date";
         else
             this.state.errors.Date=""
@@ -83,8 +115,33 @@ class BookARide extends React.Component{
         this.setState({ [name]: event.target.value });
     }
     _onFormatDate = (date) => {
-        return date.getDate() + '/' + (date.getMonth() + 1) + '/' + (date.getFullYear());
-      };
+        let month,day;
+        if(date.getMonth()+1<10)
+            month='0'+(date.getMonth()+1);
+        else
+            month=date.getMonth()+1;
+        if(date.getDate()<10)
+            day='0'+date.getDate();
+        else
+            day=date.getDate();
+        return  (date.getFullYear()) + '-' +(month) + '-' + (day);
+    };
+
+    handleBooking=(id)=>{
+        let index=this.state.AvailableRides.findIndex(x=>x.id==id);
+        axios.post('https://localhost:44334/api/booking/',{
+            From: this.state.From,
+            To: this.state.To,
+            NoOfPersons: Number(this.state.NoOfSeats),
+            RideId:id,
+            UserId:localStorage.getItem('Id'),
+            Price:this.state.AvailableRides[index].price,
+            Date: this.state.AvailableRides[index].date,
+            Time: this.state.AvailableRides[index].time,
+            Status: 0,
+            Id: id+localStorage.getItem('Id')
+        })
+    }
 
     render(){
         const { errors } = this.state;
@@ -130,7 +187,8 @@ class BookARide extends React.Component{
             {this.state.isSubmitClicked?
             <div className="booking">
                 <div className="machedRides">
-                    <div className="matches">Your Matches</div>
+                    {this.state.AvailableRides.filter(AvailableRide=>AvailableRide.userId!=localStorage.getItem('Id')).length>0?<div className="matches">Your Matches</div>:<div className="matches">Sorry, No matches available on the requested date</div>}
+                    {this.state.AvailableRides.filter(AvailableRide=>AvailableRide.userId!=localStorage.getItem('Id')).map((AvailableRide) =>
                     <DocumentCard className="card">
                         <table className="details">
                             <tr className="name">
@@ -142,65 +200,31 @@ class BookARide extends React.Component{
                             </tr>
                             <tr className="values">
                                 <td>
-                                    Madhapur
+                                    {AvailableRide.from}
                             <Icon iconName='StatusCircleInner' className="circleicon" />
                                     <Icon iconName='StatusCircleInner' className="circle" />
                                     <Icon iconName='StatusCircleInner' className="circle" />
                                     <Icon iconName='StatusCircleInner' className="circle" />
                                     <Icon iconName='StatusCircleInner' className="circle" />
                                     <Icon iconName='POISolid' className="poiicon" />
-                                </td><td>Ameerpet</td>
+                                </td><td>{AvailableRide.to}</td>
                             </tr>
                             <tr className="names">
                                 <td>Date</td><td>Time</td>
                             </tr>
                             <tr className="values">
-                                <td>dd/mm/yyyy</td><td>5am-9am</td>
+                                <td>{AvailableRide.date.slice(0,10)}</td><td>{AvailableRide.date.slice(11,)}</td>
                             </tr>
                             <tr className="names">
                                 <td>Price</td><td>Seat Availability</td>
                             </tr>
                             <tr className="values">
-                                <td>50</td><td>02</td>
+                                <td>{AvailableRide.price}</td><td>{AvailableRide.noOfSeats}</td>
                             </tr>
-                            <Link to="/ui/bookingstatus/1"><input type="button" name="book" value="Book Now" className="bookingbutton"/></Link>
+                            <Link to="/ui/bookingstatus/1"><input type="button" name="book" value="Book Now" onClick={this.handleBooking(AvailableRide.id)} className="bookingbutton"/></Link>
                         </table>
                     </DocumentCard>
-                    <DocumentCard className="card">
-                        <table className="details">
-                            <tr className="name">
-                                <td colspan="2">Prasanna</td>
-                                <td rowspan="2"><img src={logo} /></td>
-                            </tr>
-                            <tr className="names">
-                                <td>From</td><td>To</td>
-                            </tr>
-                            <tr className="values">
-                                <td>
-                                    Madhapur
-                            <Icon iconName='StatusCircleInner' className="circleicon" />
-                                    <Icon iconName='StatusCircleInner' className="circle" />
-                                    <Icon iconName='StatusCircleInner' className="circle" />
-                                    <Icon iconName='StatusCircleInner' className="circle" />
-                                    <Icon iconName='StatusCircleInner' className="circle" />
-                                    <Icon iconName='POISolid' className="poiicon" />
-                                </td><td>Ameerpet</td>
-                            </tr>
-                            <tr className="names">
-                                <td>Date</td><td>Time</td>
-                            </tr>
-                            <tr className="values">
-                                <td>dd/mm/yyyy</td><td>5am-9am</td>
-                            </tr>
-                            <tr className="names">
-                                <td>Price</td><td>Seat Availability</td>
-                            </tr>
-                            <tr className="values">
-                                <td>50</td><td>02</td>
-                            </tr>
-                            <Link to="/ui/bookingstatus/1"><input type="button" name="book" value="Book Now" className="bookingbutton"/></Link>
-                        </table>
-                    </DocumentCard>
+                    )}
                 </div>
             </div>
             :""

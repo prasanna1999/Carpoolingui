@@ -14,6 +14,10 @@ class SignUp extends React.Component {
             isCredentialsValidated:false,
             isSignUpSelected: true, passwordtype: 'password',Name:null, Email: null, Password: null, ConfirmPassword: null, errors: { Email: 'e', Password: 'e', ConfirmPassword: 'e' }, isValid: true });
     }
+    componentDidUpdate(){
+        if(localStorage.getItem('Id')!="")
+            this.props.history.push("/ui/home");
+    }
     changeState() {
         this.setState({ isSignUpSelected: !this.state.isSignUpSelected });
     }
@@ -33,12 +37,12 @@ class SignUp extends React.Component {
                 errors.Password =
                     value.length < 8
                         ? 'Password must be 8 characters long!'
-                        : '';
+                        : this.state.ConfirmPassword!=null?value==this.state.ConfirmPassword?'':'Password and Confirm Password must be same.':'';
                 break;
             case 'ConfirmPassword':
                 errors.ConfirmPassword =
-                    value.length < 8
-                        ? 'Password must be 8 characters long!'
+                    value!=this.state.Password
+                        ? 'Password and Confirm Password must be same.'
                         : '';
                 break;
             case 'Email':

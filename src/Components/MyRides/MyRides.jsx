@@ -5,6 +5,7 @@ import 'office-ui-fabric-react';
 import {DocumentCard} from 'office-ui-fabric-react';
 import 'office-ui-fabric-react/dist/css/fabric.css';
 import './MyRides.sass';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 class MyRides extends React.Component{
@@ -17,7 +18,7 @@ class MyRides extends React.Component{
         .then(response=>{console.log(response.data);
             this.setState({Rides:response.data})
         })
-        axios.get('https://localhost:44334/api/bookings/userBookings/'+localStorage.getItem('Id'))
+        axios.get('https://localhost:44334/api/booking/userBookings/'+localStorage.getItem('Id'))
         .then(response=>{console.log(response.data);
             this.setState({Bookings:response.data})
         })
@@ -28,7 +29,7 @@ class MyRides extends React.Component{
             <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg10 ms-xl6 ms-xxl4">
                     <div className="bookedRidesTitle"> Booked Rides</div>
-                    {this.state.Rides.filter(ride => ride.Type == "Booked").map((ride) =>
+                    {this.state.Bookings.map((ride) =>
                         <DocumentCard className="cards">
                             <table className="details">
                                 <tr className="name">
@@ -41,26 +42,26 @@ class MyRides extends React.Component{
                                 </tr>
                                 <tr className="values">
                                     <td>
-                                        {ride.From}
+                                        {ride.from}
                                         <Icon iconName='StatusCircleInner' className="circleicon" />
                                         <Icon iconName='StatusCircleInner' className="circle" />
                                         <Icon iconName='StatusCircleInner' className="circle" />
                                         <Icon iconName='StatusCircleInner' className="circle" />
                                         <Icon iconName='StatusCircleInner' className="circle" />
                                         <Icon iconName='POISolid' className="poiicon" />
-                                    </td><td>{ride.To}</td>
+                                    </td><td>{ride.to}</td>
                                 </tr>
                                 <tr className="names">
                                     <td>Date</td><td>Time</td>
                                 </tr>
                                 <tr className="values">
-                                    <td>{ride.Date}</td><td>{ride.Time}</td>
+                                    <td>{ride.date.slice(0,10)}</td><td>{ride.time.slice(11,)}</td>
                                 </tr>
                                 <tr className="names">
                                     <td>Price</td>
                                 </tr>
                                 <tr className="values">
-                                    <td>{ride.Price}</td>
+                                    <td>{ride.price}</td>
                                 </tr>
                             </table>
                         </DocumentCard>
@@ -102,6 +103,7 @@ class MyRides extends React.Component{
                                 </tr>
                                 <tr className="values">
                                     <td>{ride.price}</td>
+                                    <td><Link to={"/ui/offeredRide/"+ride.id}><input type="button" value="View Details"/></Link></td>
                                 </tr>
                             </table>
                         </DocumentCard>

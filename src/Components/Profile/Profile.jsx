@@ -3,6 +3,7 @@ import './Profile.sass';
 import { DocumentCard, Label, TextField, MessageBar,MessageBarType } from 'office-ui-fabric-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios'; 
 import User from '../User';
 toast.configure({
   autoClose: 2000,
@@ -21,6 +22,13 @@ class Profile extends React.Component {
         }
         else{
             this.setState({ isValid: true });
+            axios.put('https://localhost:44334/api/user/'+localStorage.getItem('Id'),{
+                Name: this.state.Name,
+                Email: this.state.Email,
+                PhoneNumber: this.state.PhoneNumber
+            })
+            localStorage.setItem('Name',this.state.Name);
+            localStorage.setItem('PhoneNumber',this.state.PhoneNumber);
             toast("Update SuccessFul !");
         }
     }
