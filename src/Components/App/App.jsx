@@ -3,11 +3,11 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Home from '../Home/Home';
 import Navbar from '../NavBar/Navbar';
 import BookARide from '../BookARide/BookaRide';
-import BookingStatus from '../BookingStatus/BookingStatus';
 import OfferARide from '../OfferARide/OfferARide';
 import MyRides from '../MyRides/MyRides';
 import SignUp from '../SignUp/SignUp';
 import RideDetails from '../RideDetails/RideDetails';
+import BookingDetails from '../BookingDetails/BookingDetails';
 import Profile from '../Profile/Profile';
 
 function App() {
@@ -23,9 +23,9 @@ function App() {
         <Route path="/ui/offeraride" component={OfferARide} />
         <Route path="/ui/myrides" component={MyRides} />
         <Route path="/signup" component={SignUp} />
-        <Route path="/ui/bookingstatus/:id" component={BookingStatus}/>
         <Route path="/ui/profile" component={Profile} />
         <Route path="/ui/offeredRide/:id" component={RideDetails}/>
+        <Route path="/ui/bookedRide/:id" component={BookingDetails}/>
       </Switch>
     </BrowserRouter>
   );

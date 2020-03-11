@@ -37,7 +37,6 @@ class OfferRide extends React.Component {
                     <label>Stop{i}</label>
                     <input type="text" name={"stop"+i}  onChange={this.handleStop}/>
                     </div>
-                // <AddStop id={i} name="stop" onChange={this.handleChange}/>
             )
         }
     }
@@ -61,6 +60,9 @@ class OfferRide extends React.Component {
             CarNumber: this.state.VehicleNumber,
             UserId: userId
             })
+            .catch(error=>{
+                toast("Unable to add ride!");
+            })
             axios.post('https://localhost:44334/api/ride/',
             {
                 UserId:userId,
@@ -76,6 +78,9 @@ class OfferRide extends React.Component {
                 Time:date,
                 EndDate:date
             })
+            .catch(error=>{
+                toast("Unable to add ride!");
+            })
             let locations=this.state.Stops;
             if(this.locationName!=""){
                 locations.concat(this.locationName);
@@ -89,11 +94,17 @@ class OfferRide extends React.Component {
                 Distance: 5,
                 Id: userId+this.state.From+this.state.To+this._onFormatDate(this.state.Date)+location
             })
+            .then(response=>{
+                toast("Ride Added SuccessFully!");
+            })
+            .catch(error=>{
+                toast("Unable to add ride!");
+            })
             })
             
             console.log(parseInt(this.state.NoOfSeats));
             console.log(Number(this.state.NoOfSeats));
-            toast("Ride Added SuccessFully!");
+            
             this.setState({noOfStops: 1, id: "", isSubmitClicked: false,isValid:true,isStopValid:true,seatid:"",
                 From: "", To: "", NoOfSeats: "", Date: "", Time: "",VehicleModel:"",VehicleNumber:"",
                 errors: { From: 'e', To: 'e', Date: 'e', Time: 'e',VehicleModel:'e',VehicleNumber:'e' },
@@ -137,7 +148,12 @@ class OfferRide extends React.Component {
         this.props.history.push("/ui/bookaride");
     }
     handleDate = (event)=>{
-        if(event<new Date())
+        let date=new Date();
+        date.setHours(0)
+        date.setMinutes(0)
+        date.setSeconds(0)
+        date.setMilliseconds(0)
+        if(event<date)
             this.state.errors.Date ="Please select valid date";
         else
             this.state.errors.Date=""

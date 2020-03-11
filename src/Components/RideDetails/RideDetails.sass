@@ -1,6 +1,77 @@
 .rideDetails
-    padding-top: 200px;
+    background: url("E:/carpoolingui/src/Images/img4.png")
+    background-repeat: no-repeat
+    background-size: 100% auto
+    background-attachment: fixed
+    min-height: 100%
+    padding-top: 200px
+    background-position: bottom
+    font-family: Arial
 
     .detailsCard
         margin-left: 20px
         padding: 30px
+
+        .cancelButton
+            margin-top: 20px
+            padding: 15px 30px
+            background-color: #9319FF
+            color: white
+            border: none
+            border-radius: 30px
+            outline: none
+            cursor: pointer
+
+    .bookingCard
+        .cards
+            display: inline-table
+            max-width: max-content
+            padding: 20px
+            img
+                width: 50px
+                height: 50px
+                float: right
+            .names td
+                color: gray
+
+            .values
+                .circleicon
+                    color: #9319FF
+                    font-size: 25px
+                    padding-left: 10px
+
+                .poiicon
+                    color: #9319FF
+                    font-size: 25px
+
+                .circle
+                    font-size: 15px
+                    color: #E0E0E0
+                    padding-left: 5px
+                td
+                    padding: 10px 0
+                    font-size: 20px
+            .buttons
+                display: flex
+                .approveButton
+                    margin: 20px
+                    padding: 15px 20px
+                    background-color: #9319FF
+                    color: white
+                    border: none
+                    border-radius: 30px
+                    outline: none
+                    cursor: pointer
+                .rejectButton
+                    margin: 20px
+                    padding: 15px 20px
+                    background-color: #FFAC19
+                    color: white
+                    border: none
+                    border-radius: 30px
+                    outline: none
+                    cursor: pointer
+
+.heading
+    font-size: 30px
+    color: #9319FF

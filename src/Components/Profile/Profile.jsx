@@ -27,9 +27,14 @@ class Profile extends React.Component {
                 Email: this.state.Email,
                 PhoneNumber: this.state.PhoneNumber
             })
+            .then(response=>{
             localStorage.setItem('Name',this.state.Name);
             localStorage.setItem('PhoneNumber',this.state.PhoneNumber);
             toast("Update SuccessFul !");
+            })
+            .catch(error=>{
+                toast("Unable to update your profile")
+            })
         }
     }
     validateForm = (errors) => {

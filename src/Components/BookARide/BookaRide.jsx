@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { toast } from 'react-toastify';
 import 'font-awesome/css/font-awesome.min.css';
 
 class BookARide extends React.Component{
@@ -70,7 +71,8 @@ class BookARide extends React.Component{
             axios.get('https://localhost:44334/api/ride/'+this.state.From+"/"+this.state.To+"/"+this.state.NoOfSeats+"/"+date)
             .then(response=>{
                 console.log(response.data)
-                this.setState({AvailableRides:response.data})})
+                this.setState({AvailableRides:response.data})
+            })
         }
     }
 
@@ -140,6 +142,12 @@ class BookARide extends React.Component{
             Time: this.state.AvailableRides[index].time,
             Status: 0,
             Id: id+localStorage.getItem('Id')
+        })
+        .then(response=>{
+            toast("Waiting for approval!");
+        })
+        .catch(error=>{
+            toast("Unable book this ride")
         })
     }
 
@@ -221,7 +229,7 @@ class BookARide extends React.Component{
                             <tr className="values">
                                 <td>{AvailableRide.price}</td><td>{AvailableRide.noOfSeats}</td>
                             </tr>
-                            <Link to="/ui/bookingstatus/1"><input type="button" name="book" value="Book Now" onClick={this.handleBooking(AvailableRide.id)} className="bookingbutton"/></Link>
+                            <input type="button" name="book" value="Book Now" onClick={this.handleBooking(AvailableRide.id)} className="bookingbutton"/>
                         </table>
                     </DocumentCard>
                     )}

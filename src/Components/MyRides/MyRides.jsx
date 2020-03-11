@@ -15,11 +15,11 @@ class MyRides extends React.Component{
     }
     componentDidMount(){
         axios.get('https://localhost:44334/api/ride/userRides/'+localStorage.getItem('Id'))
-        .then(response=>{console.log(response.data);
+        .then(response=>{
             this.setState({Rides:response.data})
         })
         axios.get('https://localhost:44334/api/booking/userBookings/'+localStorage.getItem('Id'))
-        .then(response=>{console.log(response.data);
+        .then(response=>{
             this.setState({Bookings:response.data})
         })
     }
@@ -29,11 +29,12 @@ class MyRides extends React.Component{
             <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg10 ms-xl6 ms-xxl4">
                     <div className="bookedRidesTitle"> Booked Rides</div>
-                    {this.state.Bookings.map((ride) =>
+                    {this.state.Bookings.length>0?"":<div className="heading">You have not booked any ride yet.</div>}
+                    {this.state.Bookings.map((booking) =>
                         <DocumentCard className="cards">
                             <table className="details">
                                 <tr className="name">
-                                    <td colspan="2">{ride.Name}</td>
+                                    <td colspan="2">{booking.rideId.slice(0,booking.rideId.indexOf('@'))}</td>
                                     <td rowspan="2"><img src={logo} /></td>
                                 </tr>
                                 <tr className="names">
@@ -42,26 +43,27 @@ class MyRides extends React.Component{
                                 </tr>
                                 <tr className="values">
                                     <td>
-                                        {ride.from}
+                                        {booking.from}
                                         <Icon iconName='StatusCircleInner' className="circleicon" />
                                         <Icon iconName='StatusCircleInner' className="circle" />
                                         <Icon iconName='StatusCircleInner' className="circle" />
                                         <Icon iconName='StatusCircleInner' className="circle" />
                                         <Icon iconName='StatusCircleInner' className="circle" />
                                         <Icon iconName='POISolid' className="poiicon" />
-                                    </td><td>{ride.to}</td>
+                                    </td><td>{booking.to}</td>
                                 </tr>
                                 <tr className="names">
                                     <td>Date</td><td>Time</td>
                                 </tr>
                                 <tr className="values">
-                                    <td>{ride.date.slice(0,10)}</td><td>{ride.time.slice(11,)}</td>
+                                    <td>{booking.date.slice(0,10)}</td><td>{booking.time.slice(11,)}</td>
                                 </tr>
                                 <tr className="names">
                                     <td>Price</td>
                                 </tr>
                                 <tr className="values">
-                                    <td>{ride.price}</td>
+                                    <td>{booking.price}</td>
+                                    <td><Link to={"/ui/bookedRide/"+booking.id}><input type="button" value="View Details" className="button"/></Link></td>
                                 </tr>
                             </table>
                         </DocumentCard>
@@ -70,6 +72,7 @@ class MyRides extends React.Component{
 
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg10 ms-xl6 ms-xxl4">
                     <div className="offeredRidesTitle"> Offered Rides</div>
+                    {this.state.Rides.length>0?"":<div className="heading">You have not offered any ride yet.</div>}
                     {this.state.Rides.map((ride) =>
                         <DocumentCard className="cards">
                             <table className="details">
@@ -103,7 +106,7 @@ class MyRides extends React.Component{
                                 </tr>
                                 <tr className="values">
                                     <td>{ride.price}</td>
-                                    <td><Link to={"/ui/offeredRide/"+ride.id}><input type="button" value="View Details"/></Link></td>
+                                    <td><Link to={"/ui/offeredRide/"+ride.id}><input type="button" value="View Details" className="button"/></Link></td>
                                 </tr>
                             </table>
                         </DocumentCard>
