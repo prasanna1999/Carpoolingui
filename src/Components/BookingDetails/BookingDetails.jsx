@@ -2,6 +2,8 @@ import React from 'react';
 import { DocumentCard, Label, TextField } from 'office-ui-fabric-react';
 import './BookingDetails.sass';
 import axios from 'axios';
+import {BookingStatus} from '../enum.ts';
+import {Link} from 'react-router-dom';
 
 class BookingDetails extends React.Component {
     constructor(props) {
@@ -12,11 +14,18 @@ class BookingDetails extends React.Component {
         this.id = this.props.match.params.id;
         axios.get('https://localhost:44334/api/booking/' + this.id)
             .then(response => {
-                console.log(response.data);
+                if(response.data.status==0 && new Date(response.data.date)<new Date()){
+                    axios.put('https://localhost:44334/api/booking/'+response.data.id,{
+                        Status:2,
+                        NoOfVacentSeats:response.data.noOfSeats
+                    })
+                    this.response.data.status=2;
+                }
                 this.setState({ Booking: response.data })
             })
             .catch(error=>{
                 console.log("Cannot get data");
+                this.setState({Booking:[]})
             })
     }
     cancelBooking=()=>{
@@ -34,6 +43,7 @@ class BookingDetails extends React.Component {
     render() {
         return (
             <div className="bookingDetails">
+                <Link className="backbutton" to='/ui/myrides'>My Rides</Link>
                 <DocumentCard className="detailsCard">
                     <Label className="label">From</Label>
                     <TextField className="textfeild" name="from" value={this.state.Booking.from} disabled />
@@ -43,7 +53,9 @@ class BookingDetails extends React.Component {
                     <TextField className="textfeild" name="date" value={this.state.Booking.date} disabled />
                     <Label className="label">Time</Label>
                     <TextField className="textfeild" name="time" value={this.state.Booking.time} disabled />
-                    {new Date(this.state.Booking.date) > new Date() ? this.state.Booking.status == 0 ? <input type="button" className="cancelButton" onClick={this.cancelBooking} value="Cancel Booking" /> : "" : ""}
+                    <Label className="label">Status</Label>
+                    <TextField className="textfeild" name="time" value={BookingStatus[this.state.Booking.status]} disabled />
+                    {new Date(this.state.Booking.date) > new Date() ? this.state.Booking.status == BookingStatus.Pending||BookingStatus.Approved ? <input type="button" className="cancelButton" onClick={this.cancelBooking} value="Cancel Booking" /> : "" : ""}
                 </DocumentCard>
             </div>
         )

@@ -14,7 +14,8 @@ class BookARide extends React.Component{
         this.state={isSubmitClicked:false,isValid:true,
             From:null,To:null,NoOfSeats:null,Date:null,Time:null,
             AvailableRides:[],
-            errors:{From:'e',To:'e',NoOfSeats:'e',Date:'e',Time:'e'}
+            errors:{From:'e',To:'e',NoOfSeats:'e',Date:'e',Time:'e'},
+            userName:[]
         }
     }
 
@@ -70,8 +71,18 @@ class BookARide extends React.Component{
             let date = this._onFormatDate(this.state.Date)+"T"+this.state.Time;
             axios.get('https://localhost:44334/api/ride/'+this.state.From+"/"+this.state.To+"/"+this.state.NoOfSeats+"/"+date)
             .then(response=>{
-                console.log(response.data)
                 this.setState({AvailableRides:response.data})
+                let users;
+                this.state.AvailableRides.forEach(function(ride) {
+                    let userId;
+                            axios.get('https://localhost:44334/api/user/' + ride.userId)
+                            .then(response => {
+                                this.setState({userName:this.state.userName.concat(response.data.name)})
+                            })
+                }, this);
+            })
+            .catch(error=>{
+                this.setState({AvailableRide:""})
             })
         }
     }
@@ -82,7 +93,6 @@ class BookARide extends React.Component{
         date.setMinutes(0)
         date.setSeconds(0)
         date.setMilliseconds(0)
-        console.log(date)
         if(event<date)
             this.state.errors.Date ="Please select valid date";
         else
@@ -150,6 +160,7 @@ class BookARide extends React.Component{
             toast("Unable book this ride")
         })
     }
+    index=0
 
     render(){
         const { errors } = this.state;
@@ -195,12 +206,13 @@ class BookARide extends React.Component{
             {this.state.isSubmitClicked?
             <div className="booking">
                 <div className="machedRides">
-                    {this.state.AvailableRides.filter(AvailableRide=>AvailableRide.userId!=localStorage.getItem('Id')).length>0?<div className="matches">Your Matches</div>:<div className="matches">Sorry, No matches available on the requested date</div>}
+                    {this.state.AvailableRides.length>0?this.state.AvailableRides.filter(AvailableRide=>AvailableRide.userId!=localStorage.getItem('Id')).length>0?<div className="matches">Your Matches</div>:<div className="matches">Sorry, No matches available on the requested date</div>:""}
+                    <div className="hidedisplay">{this.index=0}</div>
                     {this.state.AvailableRides.filter(AvailableRide=>AvailableRide.userId!=localStorage.getItem('Id')).map((AvailableRide) =>
                     <DocumentCard className="card">
                         <table className="details">
                             <tr className="name">
-                                <td colspan="2">Prasanna</td>
+                                <td colspan="2">{this.state.userName[this.index++]}</td>
                                 <td rowspan="2"><img src={logo} /></td>
                             </tr>
                             <tr className="names">
@@ -229,7 +241,7 @@ class BookARide extends React.Component{
                             <tr className="values">
                                 <td>{AvailableRide.price}</td><td>{AvailableRide.noOfSeats}</td>
                             </tr>
-                            <input type="button" name="book" value="Book Now" onClick={this.handleBooking(AvailableRide.id)} className="bookingbutton"/>
+                            <input type="button" name="book" value="Book Now" onClick={this.handleBooking.bind(this,AvailableRide.id)} className="bookingbutton"/>
                         </table>
                     </DocumentCard>
                     )}
