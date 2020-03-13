@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
 import './SignUp.sass';
-import axios from 'axios'; 
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
@@ -9,17 +9,20 @@ class SignUp extends React.Component {
     constructor(props) {
         super(props);
         this.state = ({
-            isLoginClicked:false,
+            isLoginClicked: false,
             isUserExists: false,
-            isCredentialsValidated:false,
-            isSignUpSelected: true, passwordtype: 'password',Name:null, Email: null, Password: null, ConfirmPassword: null, errors: { Email: 'e', Password: 'e', ConfirmPassword: 'e' }, isValid: true });
+            isCredentialsValidated: false,
+            isSignUpSelected: true, passwordtype: 'password', Name: null, Email: null, Password: null, ConfirmPassword: null, errors: { Email: 'e', Password: 'e', ConfirmPassword: 'e' }, isValid: true
+        });
     }
-    componentDidUpdate(){
-        if(localStorage.getItem('Id')!="")
+    componentDidUpdate() {
+        console.log(localStorage.getItem('Id') != null&&'')
+        if (localStorage.getItem('Id') != null&&'')
             this.props.history.push("/ui/home");
     }
     changeState() {
-        this.setState({ isSignUpSelected: !this.state.isSignUpSelected });
+        let status=!this.state.isSignUpSelected;
+        this.setState({ isSignUpSelected: status });
     }
     showHide(e) {
         e.preventDefault();
@@ -37,11 +40,11 @@ class SignUp extends React.Component {
                 errors.Password =
                     value.length < 8
                         ? 'Password must be 8 characters long!'
-                        : this.state.ConfirmPassword!=null?value==this.state.ConfirmPassword?'':'Password and Confirm Password must be same.':'';
+                        : this.state.ConfirmPassword != null ? value == this.state.ConfirmPassword ? '' : 'Password and Confirm Password must be same.' : '';
                 break;
             case 'ConfirmPassword':
                 errors.ConfirmPassword =
-                    value!=this.state.Password
+                    value != this.state.Password
                         ? 'Password and Confirm Password must be same.'
                         : '';
                 break;
@@ -60,49 +63,49 @@ class SignUp extends React.Component {
         if (!this.validateForm(this.state.errors)) {
             this.setState({ isValid: false });
         }
-        else{
-            let index=this.state.Email.indexOf('@');
-            axios.post('https://localhost:44334/api/user/', {Id:this.state.Email.slice(0,index)+this.state.Email,Name:this.state.Email.slice(0,index),Email:this.state.Email,PhoneNumber:'9876543210',Password:this.state.Password,Role:'User'})            
-            localStorage.setItem('Name',this.state.Email.slice(0,index));
-            localStorage.setItem('Email',this.state.Email);
-            localStorage.setItem('Id',this.state.Email.slice(0,index)+this.state.Email);
-            localStorage.setItem('PhoneNumber','9876543210');
+        else {
+            let index = this.state.Email.indexOf('@');
+            axios.post('https://localhost:44334/api/user/', { Id: this.state.Email.slice(0, index) + this.state.Email, Name: this.state.Email.slice(0, index), Email: this.state.Email, PhoneNumber: '9876543210', Password: this.state.Password, Role: 'User' })
+            localStorage.setItem('Name', this.state.Email.slice(0, index));
+            localStorage.setItem('Email', this.state.Email);
+            localStorage.setItem('Id', this.state.Email.slice(0, index) + this.state.Email);
+            localStorage.setItem('PhoneNumber', '9876543210');
             this.props.history.push("/ui/home");
         }
-}
+    }
 
-    validateLogIn(){
+    validateLogIn() {
         if (!this.validateLoginForm(this.state.errors)) {
             this.setState({ isValid: false });
         }
-        else{
-            this.setState({isLoginClicked:true});
-            axios.get('https://localhost:44334/api/user/'+this.state.Email)  
-            .then(response => {
-                if(response.data==""){
-                    this.setState({isUserExists:false});
-                    return;
-                }
-                else{
-                    this.setState({isUserExists:true});
-                    if(this.state.Password==response.data.password){
-                        this.setState({isCredentialsValidated:true});
-                        localStorage.setItem('Name',response.data.name);
-                        localStorage.setItem('Email',response.data.email);
-                        localStorage.setItem('Id',response.data.id);
-                        localStorage.setItem('PhoneNumber',response.data.phoneNumber);
-                        this.props.history.push("/ui/home");
+        else {
+            this.setState({ isLoginClicked: true });
+            axios.get('https://localhost:44334/api/user/' + this.state.Email)
+                .then(response => {
+                    if (response.data == "") {
+                        this.setState({ isUserExists: false });
+                        return;
                     }
-                    else{
-                        console.log("wrong password");
+                    else {
+                        this.setState({ isUserExists: true });
+                        if (this.state.Password == response.data.password) {
+                            this.setState({ isCredentialsValidated: true });
+                            localStorage.setItem('Name', response.data.name);
+                            localStorage.setItem('Email', response.data.email);
+                            localStorage.setItem('Id', response.data.id);
+                            localStorage.setItem('PhoneNumber', response.data.phoneNumber);
+                            this.props.history.push("/ui/home");
+                        }
+                        else {
+                            console.log("wrong password");
+                        }
                     }
-                }
-        })
-    }
+                })
+        }
     }
 
     validateLoginForm = (errors) => {
-        errors.ConfirmPassword="";
+        errors.ConfirmPassword = "";
         let valid = true;
         Object.values(errors).forEach(
             (val) => val.length > 0 && (valid = false)
@@ -143,8 +146,8 @@ class SignUp extends React.Component {
                     <div className="signupblock">
                         <div className="signupheading">{this.state.isSignUpSelected ? "Sign Up" : "Login"}</div>
                         <div className="signupform">
-                            {this.state.isLoginClicked?!this.state.isUserExists?<p className="error">No such email exists</p>:!this.state.isCredentialsValidated?<p className="error">Incorrect password</p>:"":""}
-                            {!this.state.isValid?<p className="error">Please enter required feilds</p>:""}
+                            {this.state.isLoginClicked ? !this.state.isUserExists ? <p className="error">No such email exists</p> : !this.state.isCredentialsValidated ? <p className="error">Incorrect password</p> : "" : ""}
+                            {!this.state.isValid ? <p className="error">Please enter required feilds</p> : ""}
                             {errors.Email.length > 0 && errors.Email !== 'e' ? <p className='error'>{errors.Email}</p> : ''}
                             <div className="passwordfeild">
                                 <input type="email" name="Email" placeholder="Enter Email Id" onChange={this.handleChange.bind(this)} /></div>
@@ -157,7 +160,7 @@ class SignUp extends React.Component {
                             {this.state.isSignUpSelected ?
                                 <div className="passwordfeild">
                                     <input type="password" name="ConfirmPassword" placeholder="Confirm Password" onChange={this.handleChange.bind(this)} /></div> : ""}
-                            <input className={this.state.isSignUpSelected ? "signupbutton" : "loginbutton"} type="button" value="Submit" onClick={this.state.isSignUpSelected ?this.validateSignIn.bind(this):this.validateLogIn.bind(this)} />
+                            <input className={this.state.isSignUpSelected ? "signupbutton" : "loginbutton"} type="button" value="Submit" onClick={this.state.isSignUpSelected ? this.validateSignIn.bind(this) : this.validateLogIn.bind(this)} />
                         </div>
                         <div className="membertext">
                             {this.state.isSignUpSelected ? "Already a member?" : "Not a member?"}

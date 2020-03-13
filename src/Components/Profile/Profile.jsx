@@ -1,40 +1,41 @@
 import React from 'react';
 import './Profile.sass';
-import { DocumentCard, Label, TextField, MessageBar,MessageBarType } from 'office-ui-fabric-react';
+import { DocumentCard, Label, TextField, MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios'; 
+import axios from 'axios';
 import User from '../User';
 toast.configure({
-  autoClose: 2000,
-  draggable: false,
+    autoClose: 2000,
+    draggable: false,
 });
 class Profile extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { Name: localStorage.getItem('Name'), Email: localStorage.getItem('Email'), PhoneNumber: localStorage.getItem('PhoneNumber'),isValid:true,
-            errors:{Name: '', Email: '', PhoneNumber:''}
+        this.state = {
+            Name: localStorage.getItem('Name'), Email: localStorage.getItem('Email'), PhoneNumber: localStorage.getItem('PhoneNumber'), isValid: true,
+            errors: { Name: '', Email: '', PhoneNumber: '' }
         };
     }
-    update=()=>{
-        if(!this.validateForm(this.state.errors)){
-            this.setState({isValid:false});
+    update = () => {
+        if (!this.validateForm(this.state.errors)) {
+            this.setState({ isValid: false });
         }
-        else{
+        else {
             this.setState({ isValid: true });
-            axios.put('https://localhost:44334/api/user/'+localStorage.getItem('Id'),{
+            axios.put('https://localhost:44334/api/user/' + localStorage.getItem('Id'), {
                 Name: this.state.Name,
                 Email: this.state.Email,
                 PhoneNumber: this.state.PhoneNumber
             })
-            .then(response=>{
-            localStorage.setItem('Name',this.state.Name);
-            localStorage.setItem('PhoneNumber',this.state.PhoneNumber);
-            toast("Update SuccessFul !");
-            })
-            .catch(error=>{
-                toast("Unable to update your profile")
-            })
+                .then(response => {
+                    localStorage.setItem('Name', this.state.Name);
+                    localStorage.setItem('PhoneNumber', this.state.PhoneNumber);
+                    toast("Update SuccessFul !");
+                })
+                .catch(error => {
+                    toast("Unable to update your profile")
+                })
         }
     }
     validateForm = (errors) => {
@@ -77,13 +78,13 @@ class Profile extends React.Component {
         this.setState({ isMessageBarActivate: true });
     }
     render() {
-        const {errors}=this.state;
+        const { errors } = this.state;
         return (
             <div className="ms-Grid profileInfo" dir="ltr">
                 <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm12">
                         <DocumentCard className="formcard">
-                            {!this.state.isValid?<p className="error">Please enter required feilds</p>:""}
+                            {!this.state.isValid ? <p className="error">Please enter required feilds</p> : ""}
                             <div className="formdata">
                                 <Label>Name {errors.Name.length > 0 && errors.Name !== 'e' ? <div className='error'>{errors.Name}</div> : ''}</Label>
                                 <TextField name="Name" value={this.state.Name} onChange={this.handleChange.bind(this)} />

@@ -9,6 +9,7 @@ import SignUp from '../SignUp/SignUp';
 import RideDetails from '../RideDetails/RideDetails';
 import BookingDetails from '../BookingDetails/BookingDetails';
 import Profile from '../Profile/Profile';
+import NotFound from '../NotFound/NotFound';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
       <Route exact path="/">
         <Redirect to="/signup" />
       </Route>
-      <Route path="/ui" component={Navbar}/>
+      <Route path="/ui" component={Navbar} />
       <Switch>
         <Route exact path="/ui/home" component={Home} />
         <Route path="/ui/bookaride" component={BookARide} />
@@ -24,8 +25,9 @@ function App() {
         <Route path="/ui/myrides" component={MyRides} />
         <Route path="/signup" component={SignUp} />
         <Route path="/ui/profile" component={Profile} />
-        <Route path="/ui/offeredRide/:id" component={RideDetails}/>
-        <Route path="/ui/bookedRide/:id" component={BookingDetails}/>
+        <Route path="/ui/offeredRide/:id" component={RideDetails} />
+        <Route path="/ui/bookedRide/:id" component={BookingDetails} />
+        <Route path="" component={NotFound}/>
       </Switch>
     </BrowserRouter>
   );

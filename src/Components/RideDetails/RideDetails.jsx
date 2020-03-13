@@ -2,15 +2,15 @@ import React from 'react';
 import { DocumentCard, Label, TextField } from 'office-ui-fabric-react';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import {RideStatus,BookingStatus} from '../enum.ts';
-import {Link} from 'react-router-dom';
+import { RideStatus, BookingStatus } from '../enum.ts';
+import { Link } from 'react-router-dom';
 import './RideDetails.sass';
 import axios from 'axios';
 
 class RideDetails extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { Ride: [], ViaPoints: [], Bookings: [],userName:[] }
+        this.state = { Ride: [], ViaPoints: [], Bookings: [], userName: [] }
     }
     componentDidMount() {
         this.id = this.props.match.params.id;
@@ -24,30 +24,30 @@ class RideDetails extends React.Component {
                     })
                 }
                 let users;
-                this.state.Bookings.forEach(function(booking) {
+                this.state.Bookings.forEach(function (booking) {
                     let userId;
-                            axios.get('https://localhost:44334/api/user/' + booking.userId)
-                            .then(response => {
-                                this.setState({userName:this.state.userName.concat(response.data.name)})
-                            })
+                    axios.get('https://localhost:44334/api/user/' + booking.userId)
+                        .then(response => {
+                            this.setState({ userName: this.state.userName.concat(response.data.name) })
+                        })
                 }, this);
             })
-            .catch(error=>{
-                this.setState({Ride:[]})
+            .catch(error => {
+                this.setState({ Ride: [] })
             })
         axios.get('https://localhost:44334/api/location/' + this.id)
             .then(response => {
                 this.setState({ ViaPoints: response.data });
             })
-            .catch(error=>{
-                this.setState({ViaPoints:[]})
+            .catch(error => {
+                this.setState({ ViaPoints: [] })
             })
         axios.get('https://localhost:44334/api/booking/rideBookings/' + this.id)
             .then(response => {
                 this.setState({ Bookings: response.data });
             })
-            .catch(error=>{
-                this.setState({Bookings:[]})
+            .catch(error => {
+                this.setState({ Bookings: [] })
             })
     }
     cancelRide = () => {
@@ -78,7 +78,7 @@ class RideDetails extends React.Component {
                 this.componentDidMount();
             })
     }
-    index=0;
+    index = 0;
     render() {
         return (
             <div className="rideDetails">
@@ -101,18 +101,68 @@ class RideDetails extends React.Component {
                                 <TextField name="time" value={this.state.Ride.time} disabled />
                                 <Label>Status</Label>
                                 <TextField name="time" value={RideStatus[this.state.Ride.status]} disabled />
-                                {new Date(this.state.Ride.date) > new Date() ? this.state.Ride.status == RideStatus.NotYetStarted ? <input type="button" className="cancelButton" onClick={this.cancelRide} value="Cancel Ride" /> : "":""}
+                                {new Date(this.state.Ride.date) > new Date() ? this.state.Ride.status == RideStatus.NotYetStarted ? <input type="button" className="cancelButton" onClick={this.cancelRide} value="Cancel Ride" /> : "" : ""}
                             </DocumentCard>
                         </div>
                         <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg6 ms-xl8 ms-xxl9">
-                        {this.state.Bookings.length>0?<div className="heading">Ride Bookings</div>:<div className="heading">No one booked your ride.</div>}
+                            {this.state.Bookings.length > 0 ? <div className="heading">Ride Bookings</div> : <div className="heading">No one booked your ride.</div>}
                             <div className="ms-Grid" dir="ltr">
                                 <div className="ms-Grid-row">
-                                    <div className="hidedisplay">{this.index=0}</div>
+                                    <div className="hidedisplay">{this.index = 0}</div>
                                     {this.state.Bookings.map((booking) =>
                                         <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg6 ms-xl4 ms-xxl4 bookingCard">
                                             <DocumentCard className="cards">
-                                                <table className="details">
+                                            <div className="ms-Grid" dir="ltr">
+                                                <div className="ms-Grid-row details">
+                                                    <div className="ms-Grid-col ms-sm8">
+                                                        <div className="name">{this.state.userName[this.index]}</div>
+                                                    </div>
+                                                    <div className="ms-Grid-col ms-sm4">
+                                                        <img src={logo} />
+                                                    </div>
+                                                    <div className="ms-Grid-col ms-sm12 ms-md6">
+                                                        <div className="names">
+                                                            From
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.from}
+                                                        </div>
+                                                        <div className="names">
+                                                            Date
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.date.slice(0, 10)}
+                                                        </div>
+                                                        <div className="names">
+                                                            Price
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.price}
+                                                        </div>
+                                                    </div>
+                                                    <div className="ms-Grid-col ms-sm12 ms-md6">
+                                                        <div className="names">
+                                                            To
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.to}
+                                                        </div>
+                                                        <div className="names">
+                                                            Time
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.date.slice(11, )}
+                                                        </div>
+                                                        <div className="names">
+                                                            No Of Seats
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.noOfPersons}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                {/* <table className="details">
                                                     <tr className="name">
                                                         <td colspan="2">{this.state.userName[this.index++]}</td>
                                                         <td rowspan="2"><img src={logo} /></td>
@@ -146,7 +196,7 @@ class RideDetails extends React.Component {
                                                         <td>{booking.price}</td>
                                                         <td>{booking.noOfPersons}</td>
                                                     </tr>
-                                                </table>
+                                                </table> */}
                                                 {booking.status == BookingStatus.Pending ?
                                                     new Date(booking.date) > new Date() ?
                                                         <div className="buttons"><input type="button" className="approveButton" value="Approve Booking" onClick={this.approveBooking.bind(this, booking)} />
@@ -156,6 +206,7 @@ class RideDetails extends React.Component {
                                                         <div><tr className="names">Status</tr><tr className="values">Rejected</tr></div>
                                                     : <div><tr className="names">Status</tr><tr className="values">{BookingStatus[booking.status]}</tr></div>
                                                 }
+                                                <div className="hidedisplay">{this.index++}</div>
                                             </DocumentCard>
                                         </div>
                                     )}

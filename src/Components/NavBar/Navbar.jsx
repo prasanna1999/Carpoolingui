@@ -2,18 +2,20 @@ import React from 'react';
 import './NavBar.sass';
 import User from '../User';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link,withRouter } from 'react-router-dom';
 
 function NavBar(props) {
-  function logout(){
-    localStorage.setItem('Name','');
-    localStorage.setItem('Email','');
-    localStorage.setItem('PhoneNumber','');
-    localStorage.setItem('Id','');
+  function logout() {
+    localStorage.setItem('Name', '');
+    localStorage.setItem('Email', '');
+    localStorage.setItem('PhoneNumber', '');
+    localStorage.setItem('Id', '');
   }
   return (
     <div className="navbar">
-      {localStorage.getItem('Name')==''?props.history.push('/signup'):""}
+      {localStorage.getItem('Name')==''?props.history.push('/signup') : ""}
+      {localStorage.getItem('Name') ==null ? props.history.push('/signup') : ""}
+      {console.log(localStorage.getItem('Name'))}
       <div className="logo">
         <Link to="/ui/home"><img src={logo} /></Link>
       </div>
@@ -30,4 +32,4 @@ function NavBar(props) {
   );
 }
 
-export default NavBar;
+export default withRouter(NavBar);

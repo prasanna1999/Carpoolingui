@@ -18,8 +18,8 @@ class MyRides extends React.Component {
             .then(response => {
                 this.setState({ Rides: response.data })
             })
-            .catch(error=>{
-                this.setState({Rides:[]})
+            .catch(error => {
+                this.setState({ Rides: [] })
             })
         axios.get('https://localhost:44334/api/booking/userBookings/' + localStorage.getItem('Id'))
             .then(response => {
@@ -40,8 +40,8 @@ class MyRides extends React.Component {
                         })
                 }, this);
             })
-            .catch(error=>{
-                this.setState({Bookings:[]})
+            .catch(error => {
+                this.setState({ Bookings: [] })
             })
     }
     index = 0
@@ -49,92 +49,127 @@ class MyRides extends React.Component {
         return (
             <div className="ms-Grid myRides" dir="ltr">
                 <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg10 ms-xl6 ms-xxl4">
+                    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg10 ms-xl6 ms-xxl6">
                         <div className="bookedRidesTitle"> Booked Rides</div>
                         {this.state.Bookings.length > 0 ? "" : <div className="heading">You have not booked any ride yet.</div>}
                         <div className="hidedisplay">{this.index = 0}</div>
-                        {this.state.Bookings.map((booking) =>
-                            <DocumentCard className="cards">
-                                <table className="details">
-                                    <tr className="name">
-                                        <td colspan="2">{this.state.userName[this.index]}</td>
-                                        <td rowspan="2"><img src={logo} /></td>
-                                    </tr>
-                                    <tr className="names">
-                                        <td>From</td>
-                                        <td>To</td>
-                                    </tr>
-                                    <tr className="values">
-                                        <td>
-                                            {booking.from}
-                                            <Icon iconName='StatusCircleInner' className="circleicon" />
-                                            <Icon iconName='StatusCircleInner' className="circle" />
-                                            <Icon iconName='StatusCircleInner' className="circle" />
-                                            <Icon iconName='StatusCircleInner' className="circle" />
-                                            <Icon iconName='StatusCircleInner' className="circle" />
-                                            <Icon iconName='POISolid' className="poiicon" />
-                                        </td><td>{booking.to}</td>
-                                    </tr>
-                                    <tr className="names">
-                                        <td>Date</td><td>Time</td>
-                                    </tr>
-                                    <tr className="values">
-                                        <td>{booking.date.slice(0, 10)}</td><td>{booking.time.slice(11, )}</td>
-                                    </tr>
-                                    <tr className="names">
-                                        <td>Price</td>
-                                    </tr>
-                                    <tr className="values">
-                                        <td>{booking.price}</td>
-                                        <td><Link to={"/ui/bookedRide/" + booking.id}><input type="button" value="View Details" className="button" /></Link></td>
-                                    </tr>
-                                </table>
-                                <div className="hidedisplay">{this.index++}</div>
-                            </DocumentCard>
-                        )}
+                        <div className="ms-Grid" dir="ltr">
+                            <div className="ms-Grid-row">
+                                {this.state.Bookings.map((booking) =>
+                                    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg10 ms-xl10 ms-xxl6 ms-xxxl6">
+                                        <DocumentCard className="cards">
+                                            <div className="ms-Grid" dir="ltr">
+                                                <div className="ms-Grid-row details">
+                                                    <div className="ms-Grid-col ms-sm8">
+                                                        <div className="name">{this.state.userName[this.index]}</div>
+                                                    </div>
+                                                    <div className="ms-Grid-col ms-sm4">
+                                                        <img src={logo} />
+                                                    </div>
+                                                    <div className="ms-Grid-col ms-sm12 ms-md6">
+                                                        <div className="names">
+                                                            From
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.from}
+                                                        </div>
+                                                        <div className="names">
+                                                            Date
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.date.slice(0, 10)}
+                                                        </div>
+                                                        <div className="names">
+                                                            Price
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.price}
+                                                        </div>
+                                                    </div>
+                                                    <div className="ms-Grid-col ms-sm12 ms-md6">
+                                                        <div className="names">
+                                                            To
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.to}
+                                                        </div>
+                                                        <div className="names">
+                                                            Time
+                                                        </div>
+                                                        <div className="values">
+                                                            {booking.date.slice(11, )}
+                                                        </div>
+                                                        <div className="names">
+                                                        </div>
+                                                        <div className="values">
+                                                            <Link to={"/ui/bookedRide/" + booking.id}><input type="button" value="View Details" className="button" /></Link>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="hidedisplay">{this.index++}</div>
+                                        </DocumentCard>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
-
-                    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg10 ms-xl6 ms-xxl4">
+                    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 ms-xl6">
                         <div className="offeredRidesTitle"> Offered Rides</div>
                         {this.state.Rides.length > 0 ? "" : <div className="heading">You have not offered any ride yet.</div>}
-                        {this.state.Rides.map((ride) =>
-                            <DocumentCard className="cards">
-                                <table className="details">
-                                    <tr className="name">
-                                        <td colspan="2">{ride.Name}</td>
-                                        <td rowspan="2"><img src={logo} /></td>
-                                    </tr>
-                                    <tr className="names">
-                                        <td>From</td>
-                                        <td>To</td>
-                                    </tr>
-                                    <tr className="values">
-                                        <td>
-                                            {ride.from}
-                                            <Icon iconName='StatusCircleInner' className="circleicon" />
-                                            <Icon iconName='StatusCircleInner' className="circle" />
-                                            <Icon iconName='StatusCircleInner' className="circle" />
-                                            <Icon iconName='StatusCircleInner' className="circle" />
-                                            <Icon iconName='StatusCircleInner' className="circle" />
-                                            <Icon iconName='POISolid' className="poiicon" />
-                                        </td><td>{ride.to}</td>
-                                    </tr>
-                                    <tr className="names">
-                                        <td>Date</td><td>Time</td>
-                                    </tr>
-                                    <tr className="values">
-                                        <td>{ride.date.slice(0, 10)}</td><td>{ride.time.slice(11, )}</td>
-                                    </tr>
-                                    <tr className="names">
-                                        <td>Price</td>
-                                    </tr>
-                                    <tr className="values">
-                                        <td>{ride.price}</td>
-                                        <td><Link to={"/ui/offeredRide/" + ride.id}><input type="button" value="View Details" className="button" /></Link></td>
-                                    </tr>
-                                </table>
-                            </DocumentCard>
-                        )}
+                        <div className="ms-Grid" dir="ltr">
+                            <div className="ms-Grid-row">
+                                {this.state.Rides.map((ride) =>
+                                    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg10 ms-xl10 ms-xxl6 ms-xxxl6">
+                                        <DocumentCard className="cards">
+                                            <div className="ms-Grid" dir="ltr">
+                                                <div className="ms-Grid-row details">
+                                                    <div className="ms-Grid-col ms-sm12 ms-md6">
+                                                        <div className="names">
+                                                            From
+                                                        </div>
+                                                        <div className="values">
+                                                            {ride.from}
+                                                        </div>
+                                                        <div className="names">
+                                                            Date
+                                                        </div>
+                                                        <div className="values">
+                                                            {ride.date.slice(0, 10)}
+                                                        </div>
+                                                        <div className="names">
+                                                            Price
+                                                        </div>
+                                                        <div className="values">
+                                                            {ride.price}
+                                                        </div>
+                                                    </div>
+                                                    <div className="ms-Grid-col ms-sm12 ms-md6">
+                                                        <div className="names">
+                                                            To
+                                                        </div>
+                                                        <div className="values">
+                                                            {ride.to}
+                                                        </div>
+                                                        <div className="names">
+                                                            Time
+                                                        </div>
+                                                        <div className="values">
+                                                            {ride.date.slice(11, )}
+                                                        </div>
+                                                        <div className="names">
+                                                        </div>
+                                                        <div className="values">
+                                                            <Link to={"/ui/offeredRide/" + ride.id}><input type="button" value="View Details" className="button" /></Link>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </DocumentCard>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

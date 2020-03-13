@@ -2,8 +2,8 @@ import React from 'react';
 import { DocumentCard, Label, TextField } from 'office-ui-fabric-react';
 import './BookingDetails.sass';
 import axios from 'axios';
-import {BookingStatus} from '../enum.ts';
-import {Link} from 'react-router-dom';
+import { BookingStatus } from '../enum.ts';
+import { Link } from 'react-router-dom';
 
 class BookingDetails extends React.Component {
     constructor(props) {
@@ -14,31 +14,31 @@ class BookingDetails extends React.Component {
         this.id = this.props.match.params.id;
         axios.get('https://localhost:44334/api/booking/' + this.id)
             .then(response => {
-                if(response.data.status==0 && new Date(response.data.date)<new Date()){
-                    axios.put('https://localhost:44334/api/booking/'+response.data.id,{
-                        Status:2,
-                        NoOfVacentSeats:response.data.noOfSeats
+                if (response.data.status == 0 && new Date(response.data.date) < new Date()) {
+                    axios.put('https://localhost:44334/api/booking/' + response.data.id, {
+                        Status: 2,
+                        NoOfVacentSeats: response.data.noOfSeats
                     })
-                    this.response.data.status=2;
+                    this.response.data.status = 2;
                 }
                 this.setState({ Booking: response.data })
             })
-            .catch(error=>{
+            .catch(error => {
                 console.log("Cannot get data");
-                this.setState({Booking:[]})
+                this.setState({ Booking: [] })
             })
     }
-    cancelBooking=()=>{
-        axios.put('https://localhost:44334/api/booking/'+this.state.Booking.id,{
-            Status:3,
-            NoOfVacentSeats:this.state.Booking.noOfSeats
+    cancelBooking = () => {
+        axios.put('https://localhost:44334/api/booking/' + this.state.Booking.id, {
+            Status: 3,
+            NoOfVacentSeats: this.state.Booking.noOfSeats
         })
-        .then(response=>{
-            this.componentDidMount()
-        })
-        .catch(error=>{
-            console.log("Unable to cancel Booking");
-        })
+            .then(response => {
+                this.componentDidMount()
+            })
+            .catch(error => {
+                console.log("Unable to cancel Booking");
+            })
     }
     render() {
         return (
@@ -55,7 +55,7 @@ class BookingDetails extends React.Component {
                     <TextField className="textfeild" name="time" value={this.state.Booking.time} disabled />
                     <Label className="label">Status</Label>
                     <TextField className="textfeild" name="time" value={BookingStatus[this.state.Booking.status]} disabled />
-                    {new Date(this.state.Booking.date) > new Date() ? this.state.Booking.status == BookingStatus.Pending||BookingStatus.Approved ? <input type="button" className="cancelButton" onClick={this.cancelBooking} value="Cancel Booking" /> : "" : ""}
+                    {new Date(this.state.Booking.date) > new Date() ? this.state.Booking.status == BookingStatus.Pending || BookingStatus.Approved ? <input type="button" className="cancelButton" onClick={this.cancelBooking} value="Cancel Booking" /> : "" : ""}
                 </DocumentCard>
             </div>
         )
