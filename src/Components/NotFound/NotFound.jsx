@@ -1,5 +1,5 @@
 import React from 'react';
-import './NotFound.sass';
+import './NotFound.scss';
 
 export default function NotFound(props){
     return (

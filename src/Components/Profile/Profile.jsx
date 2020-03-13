@@ -1,5 +1,5 @@
 import React from 'react';
-import './Profile.sass';
+import './Profile.scss';
 import { DocumentCard, Label, TextField, MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

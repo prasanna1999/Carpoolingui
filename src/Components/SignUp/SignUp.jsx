@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
-import './SignUp.sass';
+import './SignUp.scss';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';

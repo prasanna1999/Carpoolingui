@@ -1,6 +1,6 @@
 import React from 'react';
 import { DocumentCard, Label, TextField } from 'office-ui-fabric-react';
-import './BookingDetails.sass';
+import './BookingDetails.scss';
 import axios from 'axios';
 import { BookingStatus } from '../enum.ts';
 import { Link } from 'react-router-dom';

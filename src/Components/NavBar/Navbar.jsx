@@ -1,5 +1,5 @@
 import React from 'react';
-import './NavBar.sass';
+import './NavBar.scss';
 import User from '../User';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
 import { NavLink, Link,withRouter } from 'react-router-dom';

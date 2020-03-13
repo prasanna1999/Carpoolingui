@@ -4,7 +4,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import 'office-ui-fabric-react';
 import { DocumentCard } from 'office-ui-fabric-react';
 import 'office-ui-fabric-react/dist/css/fabric.css';
-import './MyRides.sass';
+import './MyRides.scss';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -14,9 +14,14 @@ class MyRides extends React.Component {
         this.state = { Rides: [], Bookings: [], userName: [] };
     }
     componentDidMount() {
+        console.log('Hello');
         axios.get('https://localhost:44334/api/ride/userRides/' + localStorage.getItem('Id'))
             .then(response => {
-                this.setState({ Rides: response.data })
+                console.log('Hello Response');
+                this.setState({ Rides: response.data },()=>{
+                    console.log('Hello Response inside callback');
+                })
+                console.log('Hello Response after setstate');
             })
             .catch(error => {
                 this.setState({ Rides: [] })
@@ -43,6 +48,7 @@ class MyRides extends React.Component {
             .catch(error => {
                 this.setState({ Bookings: [] })
             })
+            console.log('Hello Something');
     }
     index = 0
     render() {

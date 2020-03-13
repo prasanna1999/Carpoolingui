@@ -4,7 +4,7 @@ import logo from 'E:/carpoolingui/src/Images/logo.png';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RideStatus, BookingStatus } from '../enum.ts';
 import { Link } from 'react-router-dom';
-import './RideDetails.sass';
+import './RideDetails.scss';
 import axios from 'axios';
 
 class RideDetails extends React.Component {

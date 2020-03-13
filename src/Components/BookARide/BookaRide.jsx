@@ -1,5 +1,5 @@
 import React from 'react';
-import './BookARide.sass';
+import './BookARide.scss';
 import { DocumentCard, DatePicker, Toggle } from 'office-ui-fabric-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';

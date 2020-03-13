@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import './OfferRide.sass';
+import './OfferRide.scss';
 import { DocumentCard, Icon, DatePicker, Toggle } from 'office-ui-fabric-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
