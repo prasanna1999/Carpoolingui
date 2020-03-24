@@ -1,7 +1,7 @@
 import React from 'react';
 import './BookARide.scss';
 import { DocumentCard, DatePicker, Toggle } from 'office-ui-fabric-react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import axios from 'axios';
 import logo from 'E:/carpoolingui/src/Images/logo.png';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -9,7 +9,10 @@ import { toast } from 'react-toastify';
 import 'font-awesome/css/font-awesome.min.css';
 
 class BookARide extends React.Component {
-    constructor(props) {
+    constructor(props:
+        any,
+        state:
+        any) {
         super(props);
         this.state = {
             isSubmitClicked: false, isValid: true,
@@ -21,10 +24,10 @@ class BookARide extends React.Component {
     }
 
     handleToggle = () => {
-        this.props.history.push("/ui/offeraride");
+        // this.props.history.push("/ui/offeraride");
     }
 
-    setClass(e) {
+    setClass(e:any) {
         if (e.target.innerText == null)
             this.state.errors.Time = "Please select atleast one";
         else {
@@ -54,10 +57,10 @@ class BookARide extends React.Component {
         }
     }
 
-    validateForm = (errors) => {
+    validateForm = (errors:any) => {
         let valid = true;
         Object.values(errors).forEach(
-            (val) => val.length > 0 && (valid = false)
+            (val:any) => val.length > 0 && (valid = false)
         );
         return valid;
     }
@@ -88,7 +91,7 @@ class BookARide extends React.Component {
         }
     }
 
-    handleDate = (event) => {
+    handleDate = (event:any) => {
         let date = new Date();
         date.setHours(0)
         date.setMinutes(0)
@@ -100,7 +103,7 @@ class BookARide extends React.Component {
             this.state.errors.Date = ""
         this.setState({ Date: event });
     }
-    handleChange = (event) => {
+    handleChange = (event:any) => {
         event.preventDefault();
         const { name, value } = event.target;
         let errors = this.state.errors;
@@ -127,7 +130,7 @@ class BookARide extends React.Component {
         this.setState({ errors, [name]: value });
         this.setState({ [name]: event.target.value });
     }
-    _onFormatDate = (date) => {
+    _onFormatDate = (date:Date) => {
         let month, day;
         if (date.getMonth() + 1 < 10)
             month = '0' + (date.getMonth() + 1);
@@ -140,7 +143,7 @@ class BookARide extends React.Component {
         return (date.getFullYear()) + '-' + (month) + '-' + (day);
     };
 
-    handleBooking = (id) => {
+    handleBooking = (id:any) => {
         let index = this.state.AvailableRides.findIndex(x => x.id == id);
         axios.post('https://localhost:44334/api/booking/', {
             From: this.state.From,
